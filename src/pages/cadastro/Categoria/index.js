@@ -50,7 +50,7 @@ function CadastroCategoria() {
     // const URL_TOP = 'http://localhost:8080/categorias';
     const URL_TOP = window.location.hostname('localhost') 
     ? 'http://localhost:8080/categorias'
-    : 'http://localhost:8080/categorias';
+    : 'https://adeflix.herokuapp.com/categorias';
     fetch(URL_TOP)
     .then(async (respostaDoServidor) => {
       const resposta = await respostaDoServidor.json();
