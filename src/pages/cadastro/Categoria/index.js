@@ -1,25 +1,23 @@
-import React, { useState } from 'react';
-import PageDefault from '../../../components/PageDefault';
+/* eslint-disable linebreak-style */
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
+import Button from '../../../components/Button';
 
 function CadastroCategoria() {
-
   const valoresIniciais = {
     // nome: 'Categoria inicial',
     nome: '',
     // descricao: 'Descrição inicial',
     descricao: '',
-    cor: '#000'
+    cor: '#000',
   };
 
   // const nomeDaCategoria = useState('Filmes');
   // let nomeDaCategoria = useState('Filmes');
-
   // const [categorias, setCategorias] = useState(['Teste']);
   const [categorias, setCategorias] = useState([]);
-  
-
   // let [nomeDaCategoria, setNomeDaCategoria] = useState('Valor Inicial');
   // const [nomeDaCategoria, setNomeDaCategoria] = useState('Valor Inicial');
   // const [nomeDaCategoria, setNomeDaCategoria] = useState('Valor Inicial');
@@ -29,49 +27,85 @@ function CadastroCategoria() {
     setValues({
       ...values,
       [chave]: valor, // nome: 'valor'
-    })
+    });
   }
 
   function handleChange(infosDoEvento) {
     // const { getAttribute, value } = infosDoEvento.target;
     setValue(
-      infosDoEvento.target.getAttribute('name'), 
+      infosDoEvento.target.getAttribute('name'),
       infosDoEvento.target.value,
       // getAttribute('name'),
       // value
     );
-  };
+  }
 
   // console.log(nomeDaCategoria);
   // console.log('[nomeDaCategoria]', nomeDaCategoria);
 
+  // useEffect(() => {
+  //   console.log('alo alo w brazil');
+  // });
+  useEffect(() => {
+    // const URL_TOP = 'http://localhost:8080/categorias';
+    const URL_TOP = window.location.hostname('localhost') 
+    ? 'http://localhost:8080/categorias'
+    : 'http://localhost:8080/categorias';
+    fetch(URL_TOP)
+    .then(async (respostaDoServidor) => {
+      const resposta = await respostaDoServidor.json();
+      setCategorias([
+        ...resposta,
+      ]);
+    });
+    // console.log('alo alo w brazil');
+    // setTimeout(() => {
+    //   setCategorias([
+    //     ...categorias,
+    //     {
+    //       id: 1,
+    //       nome: 'Front End',
+    //       descricao: 'Uma categoria bacanuda',
+    //       cor: '#cbd1ff',
+    //     },
+    //     {
+    //       id: 2,
+    //       nome: 'Back End',
+    //       descricao: 'Outra categoria bacanuda',
+    //       cor: '#cbd1ff',
+    //     },
+    //   ]);
+    // }, 0.7 * 1000);
+  }, []);
+
   return (
     <PageDefault>
       {/* <h1>Cadastro de Categoria: {nomeDaCategoria}</h1> */}
-      <h1>Cadastro de Categoria: {values.nome}</h1>
+      <h1>
+        Cadastro de Categoria:
+        {values.nome}
+      </h1>
 
       {/* <form style={{ background: nomeDaCategoria }} onSubmit={function handleSubmit(infosDoEvento) { */}
       <form onSubmit={function handleSubmit(infosDoEvento) {
         infosDoEvento.preventDefault();
-        console.log('Você tentou enviar o form, né?');
+        // console.log('Você tentou enviar o form, né?');
 
         setCategorias([
           ...categorias,
           // nomeDaCategoria
-          values
+          values,
         ]);
 
         // setValues({});
         setValues(valoresIniciais);
-
-      }}>
-
-        
+      }}
+      >
 
         {/* <div>
           <label>
             Nome da Categoria:
-            <input type="text" 
+            <input type="text"
             name="nome"
             // value={nomeDaCategoria}
             value={values.nome}
@@ -82,7 +116,7 @@ function CadastroCategoria() {
             //   // setNomeDaCategoria(infosDoEvento.target.value);
             //   // setValue('nome', infosDoEvento.target.value);
             //   setValue(
-            //     infosDoEvento.target.getAttribute('name'), 
+            //     infosDoEvento.target.getAttribute('name'),
             //     infosDoEvento.target.value
             //   );
             // }}
@@ -99,38 +133,37 @@ function CadastroCategoria() {
           onChange={handleChange}
         />
 
-
-        <div>
-        <label>
+        {/* <div>
+          <label>
             Descrição:
-            <textarea type="text" 
+            <textarea
+              type="text"
             // value={nomeDaCategoria}
-            value={values.descricao}
+              value={values.descricao}
             // onChange={function funcaoHandlerQueOErroPediu(infosDoEvento) {
             //   // console.log('[nomeDaCategoria]', nomeDaCategoria);
             //   // console.log('[infosDoEvento]', infosDoEvento);
             //   // console.log('[infosDoEvento.target.value]', infosDoEvento.target.value);
             //   // setNomeDaCategoria(infosDoEvento.target.value);
             // }}
-            name="descricao"
-            onChange={handleChange}
+              name="descricao"
+              onChange={handleChange}
             />
           </label>
-        </div>
+        </div> */}
 
         <FormField
           label="Descrição"
-          type=""
+          type="textarea"
           name="descricao"
           value={values.descricao}
           onChange={handleChange}
         />
 
-        
         {/* <div>
           <label>
             Cor:
-            <input type="color" 
+            <input type="color"
             // value={nomeDaCategoria}
             value={values.cor}
             // onChange={function funcaoHandlerQueOErroPediu(infosDoEvento) {
@@ -145,7 +178,7 @@ function CadastroCategoria() {
           </label>
         </div> */}
 
-        <FormField 
+        <FormField
           label="Cor"
           type="color"
           name="cor"
@@ -153,23 +186,30 @@ function CadastroCategoria() {
           onChange={handleChange}
         />
 
-        <button>
+        {/* <button>
           Cadastrar
-        </button>
+        </button> */}
+        <Button>
+          Cadastrar
+        </Button>
       </form>
 
+      {categorias.length === 0 && (<div>
+        Loading...
+      </div>)}
+
       <ul>
-        {categorias.map((categoria, indice) => {
-          return (
-            <li key={`${categoria}${indice}`}>
-              {/* {categoria} */}
-              {categoria.nome}
-            </li>
-          )
-        })}
+        {/* {categorias.map((categoria, indice) => ( */}
+        {categorias.map((categoria) => (
+          // <li key={`${categoria}${indice}`}>
+          <li key={`${categoria.nome}`}>
+            {/* {categoria} */}
+            {categoria.nome}
+          </li>
+        ))}
       </ul>
 
-      <Link to="/" >
+      <Link to="/">
         Ir para a Home
       </Link>
     </PageDefault>
