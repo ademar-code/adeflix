@@ -4,61 +4,59 @@ import { Link } from 'react-router-dom';
 import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
 import Button from '../../../components/Button';
+import useForm from '../../../hooks/useForm';
+
+// function useForm(valoresIniciais) {
+
+//   const [values, setValues] = useState(valoresIniciais);
+
+//   function setValue(chave, valor) {
+//     setValues({
+//       ...values,
+//       [chave]: valor, // nome: 'valor'
+//     });
+//   }
+
+//   function handleChange(infosDoEvento) {
+//     setValue(
+//       infosDoEvento.target.getAttribute('name'),
+//       infosDoEvento.target.value,
+//     );
+//   }
+
+//   function clearForm() {
+//     setValues(valoresIniciais);
+//   }
+
+//   return {
+//     values,
+//     handleChange,
+//     clearForm,
+//   };
+// }
 
 function CadastroCategoria() {
+
   const valoresIniciais = {
-    // nome: 'Categoria inicial',
     nome: '',
-    // descricao: 'Descrição inicial',
     descricao: '',
     cor: '#000',
   };
 
-  // const nomeDaCategoria = useState('Filmes');
-  // let nomeDaCategoria = useState('Filmes');
-  // const [categorias, setCategorias] = useState(['Teste']);
+  const { handleChange, values, clearForm } = useForm(valoresIniciais);
   const [categorias, setCategorias] = useState([]);
-  // let [nomeDaCategoria, setNomeDaCategoria] = useState('Valor Inicial');
-  // const [nomeDaCategoria, setNomeDaCategoria] = useState('Valor Inicial');
-  // const [nomeDaCategoria, setNomeDaCategoria] = useState('Valor Inicial');
-  const [values, setValues] = useState(valoresIniciais);
 
-  function setValue(chave, valor) {
-    setValues({
-      ...values,
-      [chave]: valor, // nome: 'valor'
-    });
-  }
-
-  function handleChange(infosDoEvento) {
-    // const { getAttribute, value } = infosDoEvento.target;
-    setValue(
-      infosDoEvento.target.getAttribute('name'),
-      infosDoEvento.target.value,
-      // getAttribute('name'),
-      // value
-    );
-  }
-
-  // console.log(nomeDaCategoria);
-  // console.log('[nomeDaCategoria]', nomeDaCategoria);
-
-  // useEffect(() => {
-  //   console.log('alo alo w brazil');
-  // });
   useEffect(() => {
-    // const URL_TOP = 'http://localhost:8080/categorias';
     const URL_TOP = window.location.hostname.includes('localhost')
-    // ? 'http://localhost:8080/categorias'
-    ? 'https://adeflix.herokuapp.com/categorias'
-    : 'https://adeflix.herokuapp.com/categorias';
+      ? 'http://localhost:8080/categorias'
+      : 'https://adeflix.herokuapp.com/categorias';
     fetch(URL_TOP)
-    .then(async (respostaDoServidor) => {
-      const resposta = await respostaDoServidor.json();
-      setCategorias([
-        ...resposta,
-      ]);
-    });
+      .then(async (respostaDoServidor) => {
+        const resposta = await respostaDoServidor.json();
+        setCategorias([
+          ...resposta,
+        ]);
+      });
     // console.log('alo alo w brazil');
     // setTimeout(() => {
     //   setCategorias([
@@ -81,51 +79,23 @@ function CadastroCategoria() {
 
   return (
     <PageDefault>
-      {/* <h1>Cadastro de Categoria: {nomeDaCategoria}</h1> */}
       <h1>
         Cadastro de Categoria:
         {values.nome}
       </h1>
 
-      {/* <form style={{ background: nomeDaCategoria }} onSubmit={function handleSubmit(infosDoEvento) { */}
       <form onSubmit={function handleSubmit(infosDoEvento) {
         infosDoEvento.preventDefault();
-        // console.log('Você tentou enviar o form, né?');
 
         setCategorias([
           ...categorias,
-          // nomeDaCategoria
           values,
         ]);
 
-        // setValues({});
-        setValues(valoresIniciais);
+        //setValues(valoresIniciais);
+        clearForm();
       }}
       >
-
-        {/* <div>
-          <label>
-            Nome da Categoria:
-            <input type="text"
-            name="nome"
-            // value={nomeDaCategoria}
-            value={values.nome}
-            // onChange={function funcaoHandlerQueOErroPediu(infosDoEvento) {
-            //   // console.log('[nomeDaCategoria]', nomeDaCategoria);
-            //   // console.log('[infosDoEvento]', infosDoEvento);
-            //   // console.log('[infosDoEvento.target.value]', infosDoEvento.target.value);
-            //   // setNomeDaCategoria(infosDoEvento.target.value);
-            //   // setValue('nome', infosDoEvento.target.value);
-            //   setValue(
-            //     infosDoEvento.target.getAttribute('name'),
-            //     infosDoEvento.target.value
-            //   );
-            // }}
-            onChange={handleChange}
-            />
-          </label>
-        </div> */}
-
         <FormField
           label="Nome da Categoria"
           type="text"
@@ -133,26 +103,6 @@ function CadastroCategoria() {
           value={values.nome}
           onChange={handleChange}
         />
-
-        {/* <div>
-          <label>
-            Descrição:
-            <textarea
-              type="text"
-            // value={nomeDaCategoria}
-              value={values.descricao}
-            // onChange={function funcaoHandlerQueOErroPediu(infosDoEvento) {
-            //   // console.log('[nomeDaCategoria]', nomeDaCategoria);
-            //   // console.log('[infosDoEvento]', infosDoEvento);
-            //   // console.log('[infosDoEvento.target.value]', infosDoEvento.target.value);
-            //   // setNomeDaCategoria(infosDoEvento.target.value);
-            // }}
-              name="descricao"
-              onChange={handleChange}
-            />
-          </label>
-        </div> */}
-
         <FormField
           label="Descrição"
           type="textarea"
@@ -160,24 +110,6 @@ function CadastroCategoria() {
           value={values.descricao}
           onChange={handleChange}
         />
-
-        {/* <div>
-          <label>
-            Cor:
-            <input type="color"
-            // value={nomeDaCategoria}
-            value={values.cor}
-            // onChange={function funcaoHandlerQueOErroPediu(infosDoEvento) {
-            //   // console.log('[nomeDaCategoria]', nomeDaCategoria);
-            //   // console.log('[infosDoEvento]', infosDoEvento);
-            //   // console.log('[infosDoEvento.target.value]', infosDoEvento.target.value);
-            //   // setNomeDaCategoria(infosDoEvento.target.value);
-            // }}
-            name="cor"
-            onChange={handleChange}
-            />
-          </label>
-        </div> */}
 
         <FormField
           label="Cor"
@@ -187,25 +119,21 @@ function CadastroCategoria() {
           onChange={handleChange}
         />
 
-        {/* <button>
-          Cadastrar
-        </button> */}
         <Button>
           Cadastrar
         </Button>
       </form>
 
-      {categorias.length === 0 && (<div>
-        Loading...
-      </div>)}
+      {categorias.length === 0 && (
+        <div>
+          Loading...
+        </div>
+      )}
 
       <ul>
-        {/* {categorias.map((categoria, indice) => ( */}
         {categorias.map((categoria) => (
-          // <li key={`${categoria}${indice}`}>
-          <li key={`${categoria.nome}`}>
-            {/* {categoria} */}
-            {categoria.nome}
+          <li key={`${categoria.titulo}`}>
+            {categoria.titulo}
           </li>
         ))}
       </ul>

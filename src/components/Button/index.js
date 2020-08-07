@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 
 // Trocar o styled.button para styled(Link)
 
-const Button = styled(Link)`
+// const Button = styled(Link)`
+const Button = styled.button`
     color: var(--white);
     border: 1px solid var(--white);
     background: var(--black);
